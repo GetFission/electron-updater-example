@@ -3,7 +3,7 @@
   "version": "0.5.0",
   "main": "main.js",
   "description": "electron-updater example project",
-  "author": "Matt Haggard",
+  "author": "Ahmed Abdalla",
   "scripts": {
     "publish": "build",
     "run": "electron ."
@@ -19,7 +19,7 @@
     "electron-updater": "^2.18.2"
   },
   "build": {
-    "appId": "com.github.iffy.electronupdaterexample",
+    "appId": "com.github.getfission.electronupdaterexample",
     "publish": [
       {
         "provider": "generic",
