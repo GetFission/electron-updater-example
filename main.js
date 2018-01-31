@@ -125,6 +125,7 @@ app.on('ready', function()  {
 function getRequestInfo () {
   let params = {
     version: app.getVersion(),
+    projectKey: '123',
     platform: process.platform,
     sysarch: arch() === 'x64' ? 'x64' : 'ia32',
     userID: crypto.randomBytes(32).toString('hex'),  // 256-bit random ID
