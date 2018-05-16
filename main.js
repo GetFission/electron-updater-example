@@ -3,9 +3,11 @@
 
 const {app, BrowserWindow, Menu, protocol, ipcMain} = require('electron');
 const log = require('electron-log');
-const {autoUpdater} = require("electron");
+const {autoUpdater} = require("electron-updater");
+
 const arch = require('arch')
 const crypto = require('crypto')
+
 
 
 //-------------------------------------------------------------------
@@ -19,7 +21,6 @@ const crypto = require('crypto')
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 log.info('App starting...');
-
 
 //-------------------------------------------------------------------
 // Define the menu
@@ -114,6 +115,11 @@ app.on('window-all-closed', () => {
 // app quits.
 //-------------------------------------------------------------------
 app.on('ready', function()  {
+
+  const log = require("electron-log")
+  log.transports.file.level = "debug"
+  autoUpdater.logger = log
+
   function paramsToURLQuery (params) {
     let data = Object.entries(params);
     data = data.map(([k, v]) => {
@@ -139,11 +145,43 @@ app.on('ready', function()  {
   const feedURL = `http://localhost:8000/api/v1/updates/?${urlInfo}`
   console.log('calc url', getRequestInfo())
   autoUpdater.setFeedURL(feedURL)
-  console.log(`Updater Feed url is, ${autoUpdater.getFeedURL()}`)
-  autoUpdater.checkForUpdates();
+  autoUpdater.getFeedURL();
+  // console.log(`Updater Feed url is, ${autoUpdater.getFeedURL()}`)
+  // autoUpdater.checkForUpdates();
+  autoUpdater.checkForUpdatesAndNotify();
 });
 
 ipcMain.on('check-for-updates', function () {
   console.log('Triggering update check..')
-  autoUpdater.checkForUpdates();
+  // TODO: investigate setting headers
+  autoUpdater.requestHeaders = 'foo header'
+  autoUpdater.checkForUpdatesAndNotify();
 })
+
+//-------------------------------------------------------------------
+// Auto updates - Option 2 - More control
+//
+// For details about these events, see the Wiki:
+// https://github.com/electron-userland/electron-builder/wiki/Auto-Update#events
+//
+// The app doesn't need to listen to any events except `update-downloaded`
+//
+// Uncomment any of the below events to listen for them.  Also,
+// look in the previous section to see them being used.
+//-------------------------------------------------------------------
+// app.on('ready', function()  {
+//   autoUpdater.checkForUpdates();
+// });
+// autoUpdater.on('checking-for-update', () => {
+// })
+// autoUpdater.on('update-available', (info) => {
+// })
+// autoUpdater.on('update-not-available', (info) => {
+// })
+// autoUpdater.on('error', (err) => {
+// })
+// autoUpdater.on('download-progress', (progressObj) => {
+// })
+/* autoUpdater.on('update-downloaded', (info) => { */
+/*   autoUpdater.quitAndInstall();   */
+/* }) */

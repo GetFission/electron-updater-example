@@ -5,8 +5,8 @@
   "description": "electron-updater example project",
   "author": "Ahmed Abdalla",
   "scripts": {
-    "publish": "build",
-    "run": "electron ."
+    "publish": "build -p always",
+    "start": "electron ."
   },
   "devDependencies": {
     "electron": "^1.7.9",
@@ -19,13 +19,13 @@
     "electron-updater": "^2.18.2"
   },
   "build": {
-    "appId": "com.github.getfission.electronupdaterexample",
     "publish": [
       {
         "provider": "generic",
-        "url": "http://localhost:8000/api/v1/updates/"
+        "url": "http://127.0.0.1:8000/api/v1/updates/"
       }
     ],
+    "appId": "com.github.iffy.electronupdaterexample",
     "mac": {
       "category": "your.app.category.type",
       "target": [
