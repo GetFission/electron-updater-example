@@ -122,24 +122,24 @@ app.on('ready', function()  {
     return  data.join('&');
   }
 
-function getRequestInfo () {
-  let params = {
-    version: app.getVersion(),
-    projectKey: '123',
-    platform: process.platform,
-    sysarch: arch() === 'x64' ? 'x64' : 'ia32',
-    userID: crypto.randomBytes(32).toString('hex'),  // 256-bit random ID
-    channel: null
+  function getRequestInfo () {
+    let params = {
+      version: app.getVersion(),
+      projectKey: '123',
+      platform: process.platform,
+      sysarch: arch() === 'x64' ? 'x64' : 'ia32',
+      userID: crypto.randomBytes(32).toString('hex'),  // 256-bit random ID
+      channel: null
+    }
+    console.log('params are', paramsToURLQuery(params))
+    return paramsToURLQuery(params)
   }
-  console.log('params are', paramsToURLQuery(params))
-  return paramsToURLQuery(params)
-}
 
-const urlInfo = getRequestInfo()
-const feedURL = `http://localhost:8000/api/v1/updates/?${urlInfo}`
-console.log('calc url', getRequestInfo())
-autoUpdater.setFeedURL(feedURL)
-console.log(`Updater Feed url is, ${autoUpdater.getFeedURL()}`)
+  const urlInfo = getRequestInfo()
+  const feedURL = `http://localhost:8000/api/v1/updates/?${urlInfo}`
+  console.log('calc url', getRequestInfo())
+  autoUpdater.setFeedURL(feedURL)
+  console.log(`Updater Feed url is, ${autoUpdater.getFeedURL()}`)
   autoUpdater.checkForUpdates();
 });
 
