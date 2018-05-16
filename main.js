@@ -7,6 +7,7 @@ const {autoUpdater} = require("electron-updater");
 
 const arch = require('arch')
 const crypto = require('crypto')
+const { getUpdateRequestParams } = require('fission-helper')
 
 
 
@@ -120,30 +121,9 @@ app.on('ready', function()  {
   log.transports.file.level = "debug"
   autoUpdater.logger = log
 
-  function paramsToURLQuery (params) {
-    let data = Object.entries(params);
-    data = data.map(([k, v]) => {
-      return `${encodeURIComponent(k)}=${encodeURIComponent(v)}`
-    })
-    return  data.join('&');
-  }
-
-  function getRequestInfo () {
-    let params = {
-      version: app.getVersion(),
-      projectKey: '123',
-      platform: process.platform,
-      sysarch: arch() === 'x64' ? 'x64' : 'ia32',
-      userID: crypto.randomBytes(32).toString('hex'),  // 256-bit random ID
-      channel: null
-    }
-    console.log('params are', paramsToURLQuery(params))
-    return paramsToURLQuery(params)
-  }
-
-  const urlInfo = getRequestInfo()
+  const urlInfo = getUpdateRequestParams(app)
   const feedURL = `http://localhost:8000/api/v1/updates/?${urlInfo}`
-  console.log('calc url', getRequestInfo())
+  console.log('calc url', urlInfo)
   autoUpdater.setFeedURL(feedURL)
   autoUpdater.getFeedURL();
   // console.log(`Updater Feed url is, ${autoUpdater.getFeedURL()}`)
